@@ -3,7 +3,9 @@
 There are 6 registers: A, B, C, X, Y, Z.
 All of them contain signed 64 bit integers.
 
-Comments can be done using `;`.
+The A register is used by internal functions to temporarely store values.
+
+Comments can be made using `;`.
 
 Example:
 ```
@@ -13,8 +15,6 @@ PRINT 123 ; Hello world!
 The interpreter ignores any lines with text where the first word isn't an
 opcode. Thus, for example this README can be executed, though I wouldn't
 recommend using this quirk.
-
-The A register is often used by internal functions.
 
 `PRINT`: prints the value
 ```
