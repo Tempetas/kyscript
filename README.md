@@ -46,5 +46,3 @@ PRINT 321 ; And this will
 ```
 
 `IFMR`: same as `IFEQ` but checks whether the first parameter is bigger
-
-`IFLS`: same as `IFEQ` but checks whether the first parameter is smaller

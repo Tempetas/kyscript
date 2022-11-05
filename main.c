@@ -9,7 +9,6 @@
 #define OPCODE_JUMP 1405504
 #define OPCODE_IFEQ 1401168
 #define OPCODE_IFMR 1401696
-#define OPCODE_IFLS 1401648
 
 int REG_A, REG_B, REG_C, REG_X, REG_Y, REG_Z;
 
@@ -110,11 +109,6 @@ int main(int argc, char** argv) {
         break;
         case OPCODE_IFMR:
           if (*getValue(firstParam) < *getValue(secondParam)) {
-            length = getline(&line, &len, file);
-          }
-        break;
-        case OPCODE_IFLS:
-          if (*getValue(firstParam) > *getValue(secondParam)) {
             length = getline(&line, &len, file);
           }
         break;
