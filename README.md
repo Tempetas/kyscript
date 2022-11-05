@@ -17,7 +17,10 @@ PRINT 123 ; Hello world!
 The A register is often used by internal functions.
 
 `PRINT`: prints the value
-Example: PRINT Y
+Example: 
+```
+PRINT Y
+```
 
 `SET`: set a register to a value
 Example:
