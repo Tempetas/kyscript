@@ -8,9 +8,10 @@
 #define OPCODE_MUL 193463731
 #define OPCODE_JUMP 6384195425
 #define OPCODE_IFEQ 6384142890
+#define OPCODE_IFMR 6384143155
+#define OPCODE_IFLS 6384143123
 
-int REG_X, REG_Y, REG_Z;
-int REG_A;
+int REG_A, REG_B, REG_C, REG_X, REG_Y, REG_Z;
 
 const unsigned long hash(char *str) {
   unsigned long hash = 5381;
@@ -31,6 +32,15 @@ int *getValue(char *token) {
     break;
     case 'Z':
       return &REG_Z;
+    break;
+    case 'A':
+      return &REG_A;
+    break;
+    case 'B':
+      return &REG_B;
+    break;
+    case 'C':
+      return &REG_C;
     break;
     default:
       REG_A = atoi(token);
@@ -57,7 +67,7 @@ int main(int argc, char** argv) {
     return 0;
   }
 
-  printf("%ld\n", hash("IFEQ"));
+  //printf("%ld\n", hash("IFLS"));
 
   while ((length = getline(&line, &len, file)) != -1) {
     char *opcode = strtok(line, " ");
@@ -88,10 +98,23 @@ int main(int argc, char** argv) {
           int targetLine = *getValue(firstParam);
 
           rewind(file);
+
+          //Genius
           while (currentLine++ != targetLine) { length = getline(&line, &len, file); }
         break;
+        //Disgusting
         case OPCODE_IFEQ:
           if (*getValue(firstParam) != *getValue(secondParam)) {
+            length = getline(&line, &len, file);
+          }
+        break;
+        case OPCODE_IFMR:
+          if (*getValue(firstParam) < *getValue(secondParam)) {
+            length = getline(&line, &len, file);
+          }
+        break;
+        case OPCODE_IFLS:
+          if (*getValue(firstParam) > *getValue(secondParam)) {
             length = getline(&line, &len, file);
           }
         break;
