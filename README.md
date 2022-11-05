@@ -3,7 +3,12 @@
 There are 6 registers: A, B, C, X, Y, Z.
 All of them contain signed 64 bit integers.
 
-Comments can be done using `;`
+Comments can be done using `;`.
+
+The interpreter ignores any lines with text where the first word isn't an
+opcode. Thus, for example this README can be executed, though I wouldn't
+recommend using this quirk.
+
 Example:
 ```
 PRINT 123 ; Hello world!
