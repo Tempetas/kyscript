@@ -1,0 +1,25 @@
+SET X, 4 ; hey there
+ADD X, 1 ; mafs
+
+PRINT X
+
+SET Y, 3
+MUL Y, 2 ; 6
+
+PRINT Y
+
+; 6 + 5 = 11
+ADD X, Y ; add registers!
+
+ADD X, 1
+PRINT X
+
+; JUMP 13 ; loop!
+
+IFEQ X, 12 ; is X 12?
+JUMP 24
+
+PRINT 69 ; If no, say this
+
+; Else, jump to here!
+PRINT 42
