@@ -1,0 +1,24 @@
+; Print the fibbonaci sequence
+
+SET X, 0 ; Init the sequence
+SET Y, 1
+SET B, 1
+SET C, 0 ; Counter
+
+PRINT 1
+
+SET X, Y ; Store prev val
+SET Y, B ; Set new val
+SET B, 0 ; Add both to form the next value
+ADD B, X
+ADD B, Y
+
+ADD C, 1 ; Number counter
+
+PRINT B ; Print the number
+
+IFEQ C, 10 ; How many numbers to print
+JUMP 1000 ; Exit
+
+JUMP 9 ; Repeat the loop
+
