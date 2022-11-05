@@ -1,9 +1,7 @@
 ## KyScript
 
-There are 6 registers: A, B, C, X, Y, Z.
-All of them contain signed 64 bit integers.
-
-The A register is used by internal functions to temporarely store values.
+There are 26*26 "registers" with id's like AA, AB, AC, BC, etc.
+All of them can contain signed 64 bit integers.
 
 Comments can be made using `;`.
 

@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 
 #define OPCODE_PRINT 5619136
 #define OPCODE_SET 350144
@@ -10,7 +11,8 @@
 #define OPCODE_IFEQ 1401168
 #define OPCODE_IFMR 1401696
 
-int REG_A, REG_B, REG_C, REG_X, REG_Y, REG_Z;
+int REG[26*26];
+int REG_TEMP;
 
 const unsigned long hash(char *str) {
   unsigned long hash = 5381;
@@ -24,29 +26,12 @@ const unsigned long hash(char *str) {
 }
 
 int *getValue(char *token) {
-  switch (token[0]) {
-    case 'X':
-      return &REG_X;
-    break;
-    case 'Y':
-      return &REG_Y;
-    break;
-    case 'Z':
-      return &REG_Z;
-    break;
-    case 'A':
-      return &REG_A;
-    break;
-    case 'B':
-      return &REG_B;
-    break;
-    case 'C':
-      return &REG_C;
-    break;
-    default:
-      REG_A = atoi(token);
-      return &REG_A;
-    break;
+  if (isupper(token[0])) {
+    int id = (isupper(token[1]) ? token[1] - 'A' + 1 : 0) * 26 + token[0] - 'A';
+    return &REG[id];
+  } else {
+    REG_TEMP = atoi(token);
+    return &REG_TEMP;
   }
 }
 
