@@ -2,23 +2,25 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define OPCODE_PRINT 210685452402
-#define OPCODE_SET 193469745
-#define OPCODE_ADD 193450094
-#define OPCODE_MUL 193463731
-#define OPCODE_JUMP 6384195425
-#define OPCODE_IFEQ 6384142890
-#define OPCODE_IFMR 6384143155
-#define OPCODE_IFLS 6384143123
+#define OPCODE_PRINT 5619136
+#define OPCODE_SET 350144
+#define OPCODE_ADD 349824
+#define OPCODE_MUL 351040
+#define OPCODE_JUMP 1405504
+#define OPCODE_IFEQ 1401168
+#define OPCODE_IFMR 1401696
+#define OPCODE_IFLS 1401648
 
 int REG_A, REG_B, REG_C, REG_X, REG_Y, REG_Z;
 
 const unsigned long hash(char *str) {
   unsigned long hash = 5381;
-  int c;
 
-  while ((c = *str++))
-    hash = ((hash << 5) + hash) + c;
+  while (*str++) {
+    hash += *str;
+    hash = hash << 2;
+  }
+
   return hash;
 }
 
@@ -66,8 +68,6 @@ int main(int argc, char** argv) {
     puts("File doesn`t exist");
     return 0;
   }
-
-  //printf("%ld\n", hash("IFLS"));
 
   while ((length = getline(&line, &len, file)) != -1) {
     char *opcode = strtok(line, " ");
