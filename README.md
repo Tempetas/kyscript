@@ -1,8 +1,4 @@
-
-#define OPCODE_JUMP 6384195425
-#define OPCODE_IFEQ 6384142890
-#define OPCODE_IFMR 6384143155
-#define OPCODE_IFLS 6384143123
+## KyScript
 
 There are 6 registers: A, B, C, X, Y, Z.
 All of them contain signed 64 bit integers.
