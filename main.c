@@ -83,13 +83,27 @@ int main(int argc, char** argv) {
           *getValue(firstParam) *= *getValue(secondParam);
         break;
         case OPCODE_JUMP:
-          int currentLine = 0;
-          int targetLine = *getValue(firstParam);
+          int lin = 0;
+          int targetLine;
+
+          if (firstParam[0] == '+' || firstParam[0] == '-') {
+            int sign = (firstParam[0] == '+' ? 1 : -1);
+
+            memmove(firstParam, firstParam + 1, strlen(firstParam));
+
+            targetLine = currentLine + (sign * *getValue(firstParam));
+          } else {
+            targetLine = *getValue(firstParam);
+          }
+
+          currentLine = targetLine;
 
           rewind(file);
 
           //Genius
-          while (currentLine++ != targetLine) { length = getline(&line, &len, file); }
+          while (lin++ != targetLine) { length = getline(&line, &len, file); }
+
+          goto line_done;
         break;
         //Disgusting
         case OPCODE_IFEQ:
@@ -111,6 +125,8 @@ int main(int argc, char** argv) {
 
       opcode = strtok(NULL, ",");
     }
+
+    line_done:;
   }
 
   fclose(file);

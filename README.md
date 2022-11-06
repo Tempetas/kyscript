@@ -31,9 +31,12 @@ SET Y, X
 
 `MUL`: same syntaxis as `ADD`, multiply a value in a register
 
-`JUMP`: jump to a line in code
+`JUMP`: jump to a line in code, using + or - makes the jump relative to the
+current line
 ```
 JUMP 32 ; Jump to line 32
+JUMP +1 ; Jump 2 lines further
+JUMP -4 ; Jump 4 lines back
 ```
 
 `IFEQ`: compare values and skip the next line if they aren't equal
