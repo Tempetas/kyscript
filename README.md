@@ -3,6 +3,8 @@
 There are 26*26 "registers" with id's like AA, AB, AC, BC, etc.
 All of them can contain signed 64 bit integers.
 
+Script command arguments are loaded into the registers starting with the A register.
+
 Comments can be made using `;`.
 
 Example:

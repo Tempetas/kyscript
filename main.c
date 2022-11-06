@@ -36,10 +36,10 @@ int *getValue(char *token) {
 }
 
 int main(int argc, char** argv) {
-  FILE *file;
+  FILE *file = NULL;
   char *line = NULL;
   size_t len = 0;
-  ssize_t length;
+  ssize_t length = 0;
 
   if (argc < 2) {
     puts("Enter a file");
@@ -53,10 +53,15 @@ int main(int argc, char** argv) {
     return 0;
   }
 
-  while ((length = getline(&line, &len, file)) != -1) {
+  //Load arguments into registers
+  for (int i = 2; i < argc; i++) {
+    REG[i - 2] = atoi(argv[i]);
+  }
+
+  for (int currentLine = 0; (length = getline(&line, &len, file)) != -1; currentLine++) {
     char *opcode = strtok(line, " ");
 
-    while(opcode != NULL) {
+    while (opcode != NULL) {
       if (opcode[0] == ';') {
         break;
       }
