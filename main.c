@@ -3,6 +3,8 @@
 #include <string.h>
 #include <ctype.h>
 
+#define LINE_LENGTH 128
+
 #define OPCODE_PRINT 5619136
 #define OPCODE_SET 350144
 #define OPCODE_ADD 349824
@@ -16,10 +18,11 @@
 int REG[26 * 26];
 int REG_TEMP;
 
-int PARAM_PRINT_NEWLINE = 1;
+#define PARAM_PRINT_NEWLINE -1079885616
+int PRINT_NEWLINE = 1;
 
-const unsigned long hash(char *str) {
-  unsigned long hash = 5381;
+const int hash(char *str) {
+  int hash = 5381;
 
   while (*str++) {
     hash += *str;
@@ -55,9 +58,7 @@ char *formatStr(char *str) {
 
 int main(int argc, char** argv) {
   FILE *file = NULL;
-  char *line = NULL;
-  size_t len = 0;
-  ssize_t length = 0;
+  char line[LINE_LENGTH];
 
   if (argc < 2) {
     puts("Enter a file");
@@ -76,7 +77,7 @@ int main(int argc, char** argv) {
     REG[i - 2] = atoi(argv[i]);
   }
 
-  for (int currentLine = 0; (length = getline(&line, &len, file)) != -1; currentLine++) {
+  for (int currentLine = 0; fgets(line, LINE_LENGTH, file) != NULL; currentLine++) {
     char *opcode = strtok(line, " ");
 
     while (opcode != NULL) {
@@ -90,8 +91,8 @@ int main(int argc, char** argv) {
       switch (hash(opcode)) {
         case OPCODE_PRINT:
           if (firstParam[0] == '"') {
-            char *str = malloc(length);
-            memset(str, 0, length);
+            char *str = malloc(LINE_LENGTH);
+            memset(str, 0, LINE_LENGTH);
 
             sprintf(str, "%s %s", formatStr(firstParam + 1), formatStr(secondParam));
 
@@ -111,14 +112,14 @@ int main(int argc, char** argv) {
           } else {
             char *format = "%i\n";
 
-            if (!PARAM_PRINT_NEWLINE) {
+            if (!PRINT_NEWLINE) {
               format = "%i";
             }
 
             printf(format, *getValue(firstParam));
           }
         break;
-        case OPCODE_INPUT:
+        case OPCODE_INPUT:;
           int input;
 
           if (scanf("%d", &input) == 1) {
@@ -134,7 +135,7 @@ int main(int argc, char** argv) {
         case OPCODE_MUL:
           *getValue(firstParam) *= *getValue(secondParam);
         break;
-        case OPCODE_JUMP:
+        case OPCODE_JUMP:;
           int lin = 0;
           int targetLine;
 
@@ -153,24 +154,26 @@ int main(int argc, char** argv) {
           rewind(file);
 
           //Genius
-          while (lin++ != targetLine) { length = getline(&line, &len, file); }
+          while (lin++ != targetLine) { fgets(line, LINE_LENGTH, file); }
 
           goto line_done;
         break;
         //Disgusting
         case OPCODE_IFEQ:
           if (*getValue(firstParam) != *getValue(secondParam)) {
-            length = getline(&line, &len, file);
+            fgets(line, LINE_LENGTH, file);
           }
         break;
         case OPCODE_IFMR:
           if (*getValue(firstParam) < *getValue(secondParam)) {
-            length = getline(&line, &len, file);
+            fgets(line, LINE_LENGTH, file);
           }
         break;
         case OPCODE_PARAM:
-          if (strcmp("PRINT_NEWLINE", firstParam) == 0) {
-            PARAM_PRINT_NEWLINE = *getValue(secondParam);
+          switch (hash(firstParam)) {
+            case PARAM_PRINT_NEWLINE:
+              PRINT_NEWLINE = *getValue(secondParam);
+            break;
           }
         break;
         default:
@@ -187,10 +190,6 @@ int main(int argc, char** argv) {
   }
 
   fclose(file);
-
-  if (line) {
-    free(line);
-  }
 
   return 0;
 }

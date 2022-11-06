@@ -1,4 +1,4 @@
-## KyScript
+## Kyscript
 
 There are 26*26 "registers" with id's like AA, AB, AC, BC, etc.
 All of them can contain signed 64 bit integers.
@@ -6,6 +6,8 @@ All of them can contain signed 64 bit integers.
 Script command arguments are loaded into the registers starting with the A register.
 
 Comments can be made using `;`.
+
+A line of source code cannot not be longer than 128 characters.
 
 Example:
 ```
@@ -16,8 +18,9 @@ The interpreter ignores any lines with text where the first word isn't an
 opcode. Thus, for example this README can be executed, though I wouldn't
 recommend using this quirk.
 
-`PRINT`: prints the value
+`PRINT`: prints the value, supports strings
 ```
+PRINT "Among us\n"
 PRINT Y
 ```
 
@@ -54,3 +57,8 @@ PRINT 321 ; And this will
 ```
 
 `IFMR`: same as `IFEQ` but checks whether the first parameter is bigger
+
+`PARAM`: change the according interpreter setting
+```
+PARAM PRINT_NEWLINE 0 ; Prevents `PRINT` from appending a newline to each integer output
+```

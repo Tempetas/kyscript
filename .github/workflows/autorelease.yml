@@ -1,0 +1,52 @@
+---
+name: "autorelease"
+
+on:
+  push:
+    branches: ["master", "main"]
+
+jobs:
+  release:
+    name: "Release"
+    runs-on: "ubuntu-latest"
+
+    steps:
+      - name: "Fetch repository"
+        uses: actions/checkout@v3
+
+      - name: "Get latest commit hash"
+        id: hash
+        run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
+
+      - name: "Set up MinGW"
+        uses: egor-tensin/setup-mingw@v2
+        with:
+          platform: x64
+
+      - name: "Compile for linux"
+        run: gcc main.c -Os -flto -fuse-ld=gold -o kyscript
+
+      - name: "Remove unnecessary symbols"
+        run: strip kyscript -s -R .comment -R .gnu.version --strip-unneeded
+
+      - name: "Compile for windows"
+        run: x86_64-w64-mingw32-gcc main.c -Os -flto -s -o kyscript-win
+
+      - name: "Upload artifacts"
+        uses: actions/upload-artifact@v3
+        with:
+          name: Kyscript
+          path:  |
+            kyscript
+            kyscript-win.exe
+
+      - name: "Release"
+        uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "latest"
+          prerelease: false
+          title: "Build for commit ${{ steps.hash.outputs.sha_short }}"
+          files: |
+            kyscript
+            kyscript-win.exe
