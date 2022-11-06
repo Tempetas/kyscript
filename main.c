@@ -10,9 +10,13 @@
 #define OPCODE_JUMP 1405504
 #define OPCODE_IFEQ 1401168
 #define OPCODE_IFMR 1401696
+#define OPCODE_INPUT 5617280
+#define OPCODE_PARAM 5603088
 
-int REG[26*26];
+int REG[26 * 26];
 int REG_TEMP;
+
+int PARAM_PRINT_NEWLINE = 1;
 
 const unsigned long hash(char *str) {
   unsigned long hash = 5381;
@@ -33,6 +37,20 @@ int *getValue(char *token) {
     REG_TEMP = atoi(token);
     return &REG_TEMP;
   }
+}
+
+//Replace "\n" with the newline character
+char *formatStr(char *str) {
+  if (str == NULL || str[0] == '\n') { return str; }
+
+  for (int i = 0; str[i + 1] != '\0'; i++) {
+    if (str[i] == '\\' && str[i + 1] == 'n') {
+      str[i] = ' ';
+      str[i + 1] = '\n';
+    }
+  }
+
+  return str;
 }
 
 int main(int argc, char** argv) {
@@ -71,7 +89,41 @@ int main(int argc, char** argv) {
 
       switch (hash(opcode)) {
         case OPCODE_PRINT:
-          printf("%i\n", *getValue(firstParam));
+          if (firstParam[0] == '"') {
+            char *str = malloc(length);
+            memset(str, 0, length);
+
+            sprintf(str, "%s %s", formatStr(firstParam + 1), formatStr(secondParam));
+
+            do {
+              firstParam = strtok(NULL, " ");
+              sprintf(str, "%s %s", str, formatStr(firstParam));
+            } while (firstParam != NULL);
+
+            //???
+            str[strlen(str) - 9] = '\0';
+
+            printf("%s", str);
+
+            free(str);
+
+            goto line_done;
+          } else {
+            char *format = "%i\n";
+
+            if (!PARAM_PRINT_NEWLINE) {
+              format = "%i";
+            }
+
+            printf(format, *getValue(firstParam));
+          }
+        break;
+        case OPCODE_INPUT:
+          int input;
+
+          if (scanf("%d", &input) == 1) {
+            *getValue(firstParam) = input;
+          }
         break;
         case OPCODE_SET:
           *getValue(firstParam) = *getValue(secondParam);
@@ -114,6 +166,11 @@ int main(int argc, char** argv) {
         case OPCODE_IFMR:
           if (*getValue(firstParam) < *getValue(secondParam)) {
             length = getline(&line, &len, file);
+          }
+        break;
+        case OPCODE_PARAM:
+          if (strcmp("PRINT_NEWLINE", firstParam) == 0) {
+            PARAM_PRINT_NEWLINE = *getValue(secondParam);
           }
         break;
         default:

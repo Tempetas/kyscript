@@ -1,3 +1,7 @@
+; PARAM PRINT_NEWLINE 0
+
+PRINT "Hello world!\n"
+
 SET X, 4 ; hey there
 ADD X, 1 ; mafs
 
@@ -23,3 +27,8 @@ PRINT 69 ; If no, say this
 
 ; Else, jump to here!
 PRINT 42
+
+PRINT "Enter a number: "
+INPUT X
+PRINT "You have entered: "
+PRINT X

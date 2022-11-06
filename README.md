@@ -21,6 +21,12 @@ recommend using this quirk.
 PRINT Y
 ```
 
+`INPUT`: store user input in a register
+```
+INPUT X
+PRINT X
+```
+
 `SET`: set a register to a value
 ```
 SET X, 4
