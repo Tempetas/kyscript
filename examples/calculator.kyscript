@@ -1,0 +1,26 @@
+PARAM PRINT_NEWLINE 0
+
+PRINT "---Calculator---\n"
+
+PRINT "Enter the first number:\n> "
+INPUT A
+
+PRINT "Enter the second number:\n> "
+INPUT B
+
+PRINT "Select whet you want to do:\n"
+PRINT "1) Add\n"
+PRINT "2) Subtract\n> "
+
+; Store the choice
+INPUT X
+
+; Will we subtract?
+IFEQ X, 2
+MUL B, -1 ; Invert the second number to turn addition into subtraction
+
+ADD A, B
+
+PRINT "Result: "
+PRINT A
+PRINT "\n"
