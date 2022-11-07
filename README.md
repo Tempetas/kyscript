@@ -5,21 +5,16 @@ All of them can contain signed 64 bit integers.
 
 Script command arguments are loaded into the registers starting with the A register.
 
-Comments can be made using `;`, they must always come after a space.
-```
-PRINT X ; This is a comment
-```
-
 A line of source code cannot not be longer than 128 characters.
+
+Comments can be made using `;`, they must always come after a space.
 
 Example:
 ```
-PRINT 123 ; Hello world!
+PRINT 123 ; This is a comment
 ```
 
-The interpreter ignores any lines with text where the first word isn't an
-opcode. Thus, for example this README can be executed, though I wouldn't
-recommend using this quirk.
+# Opcodes
 
 `PRINT`: prints the value, supports strings
 ```
