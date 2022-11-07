@@ -1,7 +1,7 @@
+#include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <ctype.h>
 
 #define LINE_LENGTH 128
 
@@ -21,180 +21,182 @@ int REG_TEMP;
 #define PARAM_PRINT_NEWLINE -1079885616
 int PRINT_NEWLINE = 1;
 
-const int hash(char *str) {
-  int hash = 5381;
+const int hash(char* str) {
+	int hash = 5381;
 
-  while (*str++) {
-    hash += *str;
-    hash = hash << 2;
-  }
+	while (*str++) {
+		hash += *str;
+		hash = hash << 2;
+	}
 
-  return hash;
+	return hash;
 }
 
-int *getValue(char *token) {
-  if (isupper(token[0])) {
-    int id = (isupper(token[1]) ? token[1] - 'A' + 1 : 0) * 26 + token[0] - 'A';
-    return &REG[id];
-  } else {
-    REG_TEMP = atoi(token);
-    return &REG_TEMP;
-  }
+int* getValue(char* token) {
+	if (isupper(token[0])) {
+		int id = (isupper(token[1]) ? token[1] - 'A' + 1 : 0) * 26 + token[0] - 'A';
+		return &REG[id];
+	} else {
+		REG_TEMP = atoi(token);
+		return &REG_TEMP;
+	}
 }
 
 //Replace "\n" with the newline character
-char *formatStr(char *str) {
-  if (str == NULL || str[0] == '\n') { return str; }
+char* formatStr(char* str) {
+	if (str == NULL || str[0] == '\n') {
+		return str;
+	}
 
-  for (int i = 0; str[i + 1] != '\0'; i++) {
-    if (str[i] == '\\' && str[i + 1] == 'n') {
-      str[i] = ' ';
-      str[i + 1] = '\n';
-    }
-  }
+	for (int i = 0; str[i + 1] != '\0'; i++) {
+		if (str[i] == '\\' && str[i + 1] == 'n') {
+			str[i] = ' ';
+			str[i + 1] = '\n';
+		}
+	}
 
-  return str;
+	return str;
 }
 
 int main(int argc, char** argv) {
-  FILE *file = NULL;
-  char line[LINE_LENGTH];
+	FILE* file = NULL;
+	char line[LINE_LENGTH];
 
-  if (argc < 2) {
-    puts("Enter a file");
-    return 0;
-  }
+	if (argc < 2) {
+		puts("Enter a file");
+		return 0;
+	}
 
-  file = fopen(argv[1], "r");
+	file = fopen(argv[1], "r");
 
-  if (file == NULL) {
-    puts("File doesn`t exist");
-    return 0;
-  }
+	if (file == NULL) {
+		puts("File doesn`t exist");
+		return 0;
+	}
 
-  //Load arguments into registers
-  for (int i = 2; i < argc; i++) {
-    REG[i - 2] = atoi(argv[i]);
-  }
+	//Load arguments into registers
+	for (int i = 2; i < argc; i++) {
+		REG[i - 2] = atoi(argv[i]);
+	}
 
-  for (int currentLine = 1; fgets(line, LINE_LENGTH, file) != NULL; currentLine++) {
-    char *opcode = strtok(line, " ");
+	for (int currentLine = 1; fgets(line, LINE_LENGTH, file) != NULL; currentLine++) {
+		char* opcode = strtok(line, " ");
 
-    while (opcode != NULL) {
-      if (opcode[0] == ';') {
-        break;
-      }
+		while (opcode != NULL) {
+			if (opcode[0] == ';') {
+				break;
+			}
 
-      char *firstParam = strtok(NULL, " ");
-      char *secondParam = strtok(NULL, " ");
+			char* firstParam = strtok(NULL, " ");
+			char* secondParam = strtok(NULL, " ");
 
-      switch (hash(opcode)) {
-        case OPCODE_PRINT:
-          if (firstParam[0] == '"') {
-            char *str = malloc(LINE_LENGTH);
-            memset(str, 0, LINE_LENGTH);
+			switch (hash(opcode)) {
+				case OPCODE_PRINT:
+					if (firstParam[0] == '"') {
+						char* str = malloc(LINE_LENGTH);
+						memset(str, 0, LINE_LENGTH);
 
-            strcpy(str, formatStr(firstParam + 1));
+						strcpy(str, formatStr(firstParam + 1));
 
-            while (secondParam != NULL && secondParam[0] != ';') {
-              sprintf(str, "%s %s", str, formatStr(secondParam));
-              secondParam = strtok(NULL, " ");
-            }
+						while (secondParam != NULL && secondParam[0] != ';') {
+							sprintf(str, "%s %s", str, formatStr(secondParam));
+							secondParam = strtok(NULL, " ");
+						}
 
-            //Hack!
-            str[strlen(str) - ((str[strlen(str) - 2] == '"') ? 2 : 1)] = '\0';
+						//Hack!
+						str[strlen(str) - ((str[strlen(str) - 2] == '"') ? 2 : 1)] = '\0';
 
-            printf("%s", str);
+						printf("%s", str);
 
-            free(str);
+						free(str);
 
-            goto line_done;
-          } else {
-            printf((PRINT_NEWLINE) ? "%i\n" : "%i", *getValue(firstParam));
-          }
-        break;
-        case OPCODE_INPUT:;
-          int input;
+						goto line_done;
+					} else {
+						printf((PRINT_NEWLINE) ? "%i\n" : "%i", *getValue(firstParam));
+					}
+					break;
+				case OPCODE_INPUT:;
+					int input;
 
-          if (scanf("%d", &input) == 1) {
-            *getValue(firstParam) = input;
-          }
-        break;
-        case OPCODE_SET:
-          *getValue(firstParam) = *getValue(secondParam);
-        break;
-        case OPCODE_ADD:
-          *getValue(firstParam) += *getValue(secondParam);
-        break;
-        case OPCODE_MUL:
-          *getValue(firstParam) *= *getValue(secondParam);
-        break;
-        case OPCODE_JUMP:;
-          int targetLine;
-          int sign;
+					if (scanf("%d", &input) == 1) {
+						*getValue(firstParam) = input;
+					}
+					break;
+				case OPCODE_SET:
+					*getValue(firstParam) = *getValue(secondParam);
+					break;
+				case OPCODE_ADD:
+					*getValue(firstParam) += *getValue(secondParam);
+					break;
+				case OPCODE_MUL:
+					*getValue(firstParam) *= *getValue(secondParam);
+					break;
+				case OPCODE_JUMP:;
+					int targetLine;
+					int sign;
 
-          if (firstParam[0] == '+' || firstParam[0] == '-') {
-            sign = (firstParam[0] == '+' ? 1 : -1);
-            memmove(firstParam, firstParam + 1, strlen(firstParam));
+					if (firstParam[0] == '+' || firstParam[0] == '-') {
+						sign = (firstParam[0] == '+' ? 1 : -1);
+						memmove(firstParam, firstParam + 1, strlen(firstParam));
 
-            targetLine = currentLine + (sign * *getValue(firstParam));
-          } else {
-            targetLine = *getValue(firstParam);
-          }
+						targetLine = currentLine + (sign * *getValue(firstParam));
+					} else {
+						targetLine = *getValue(firstParam);
+					}
 
-          int diff = targetLine - currentLine;
+					int diff = targetLine - currentLine;
 
-          sign = (diff > 0) ? 1 : -1;
+					sign = (diff > 0) ? 1 : -1;
 
-          //Hack! Adjust line positions depending on whether we should go backwards or forwards
-          if (diff < 0) {
-            currentLine++;
-            targetLine -= 2;
-          } else {
-            targetLine -= (diff > 2) ? 2 : diff;
-          }
+					//Hack! Adjust line positions depending on whether we should go backwards or forwards
+					if (diff < 0) {
+						currentLine++;
+						targetLine -= 2;
+					} else {
+						targetLine -= (diff > 2) ? 2 : diff;
+					}
 
-          /*Move character pointers to find newlines and thus detect us
-            passing through a line, both, backwards and forwards*/
-          for (char c; currentLine != targetLine; c = fgetc(file), fseek(file, (sign == -1) ? -2 : 0, SEEK_CUR)) {
-            if (c == '\n') {
-              currentLine += sign;
-            }
-          }
+					/*Move character pointers to find newlines and thus detect us
+						passing through a line, both, backwards and forwards*/
+					for (char c; currentLine != targetLine; c = fgetc(file), fseek(file, (sign == -1) ? -2 : 0, SEEK_CUR)) {
+						if (c == '\n') {
+							currentLine += sign;
+						}
+					}
 
-          goto line_done;
-        break;
-        case OPCODE_IFEQ:
-          if (*getValue(firstParam) != *getValue(secondParam)) {
-            fgets(line, LINE_LENGTH, file);
-          }
-        break;
-        case OPCODE_IFMR:
-          if (*getValue(firstParam) < *getValue(secondParam)) {
-            fgets(line, LINE_LENGTH, file);
-          }
-        break;
-        case OPCODE_PARAM:
-          switch (hash(firstParam)) {
-            case PARAM_PRINT_NEWLINE:
-              PRINT_NEWLINE = *getValue(secondParam);
-            break;
-          }
-        break;
-        default:
-          if (opcode[0] != '\n') {
-            //printf("Uknown opcode: %s\n", opcode);
-          }
-        break;
-      }
+					goto line_done;
+					break;
+				case OPCODE_IFEQ:
+					if (*getValue(firstParam) != *getValue(secondParam)) {
+						fgets(line, LINE_LENGTH, file);
+					}
+					break;
+				case OPCODE_IFMR:
+					if (*getValue(firstParam) < *getValue(secondParam)) {
+						fgets(line, LINE_LENGTH, file);
+					}
+					break;
+				case OPCODE_PARAM:
+					switch (hash(firstParam)) {
+						case PARAM_PRINT_NEWLINE:
+							PRINT_NEWLINE = *getValue(secondParam);
+							break;
+					}
+					break;
+				default:
+					if (opcode[0] != '\n') {
+						//printf("Uknown opcode: %s\n", opcode);
+					}
+					break;
+			}
 
-      opcode = strtok(NULL, ",");
-    }
+			opcode = strtok(NULL, ",");
+		}
 
-    line_done:;
-  }
+	line_done:;
+	}
 
-  fclose(file);
+	fclose(file);
 
-  return 0;
+	return 0;
 }
