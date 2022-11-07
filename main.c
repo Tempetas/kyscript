@@ -77,7 +77,7 @@ int main(int argc, char** argv) {
     REG[i - 2] = atoi(argv[i]);
   }
 
-  for (int currentLine = 0; fgets(line, LINE_LENGTH, file) != NULL; currentLine++) {
+  for (int currentLine = 1; fgets(line, LINE_LENGTH, file) != NULL; currentLine++) {
     char *opcode = strtok(line, " ");
 
     while (opcode != NULL) {
@@ -98,10 +98,10 @@ int main(int argc, char** argv) {
 
             while (secondParam != NULL && secondParam[0] != ';') {
               sprintf(str, "%s %s", str, formatStr(secondParam));
-	      secondParam = strtok(NULL, " ");
-	    }
+              secondParam = strtok(NULL, " ");
+            }
 
-	    //Hack!
+            //Hack!
             str[strlen(str) - ((str[strlen(str) - 2] == '"') ? 2 : 1)] = '\0';
 
             printf("%s", str);
@@ -130,12 +130,11 @@ int main(int argc, char** argv) {
           *getValue(firstParam) *= *getValue(secondParam);
         break;
         case OPCODE_JUMP:;
-          int lin = 0;
           int targetLine;
+          int sign;
 
           if (firstParam[0] == '+' || firstParam[0] == '-') {
-            int sign = (firstParam[0] == '+' ? 1 : -1);
-
+            sign = (firstParam[0] == '+' ? 1 : -1);
             memmove(firstParam, firstParam + 1, strlen(firstParam));
 
             targetLine = currentLine + (sign * *getValue(firstParam));
@@ -143,16 +142,28 @@ int main(int argc, char** argv) {
             targetLine = *getValue(firstParam);
           }
 
-          currentLine = targetLine;
+          int diff = targetLine - currentLine;
 
-          rewind(file);
+          sign = (diff > 0) ? 1 : -1;
 
-          //Genius
-          while (lin++ != targetLine) { fgets(line, LINE_LENGTH, file); }
+          //Hack! Adjust line positions depending on whether we should go backwards or forwards
+          if (diff < 0) {
+            currentLine++;
+            targetLine -= 2;
+          } else {
+            targetLine -= (diff > 2) ? 2 : diff;
+          }
+
+          /*Move character pointers to find newlines and thus detect us
+            passing through a line, both, backwards and forwards*/
+          for (char c; currentLine != targetLine; c = fgetc(file), fseek(file, (sign == -1) ? -2 : 0, SEEK_CUR)) {
+            if (c == '\n') {
+              currentLine += sign;
+            }
+          }
 
           goto line_done;
         break;
-        //Disgusting
         case OPCODE_IFEQ:
           if (*getValue(firstParam) != *getValue(secondParam)) {
             fgets(line, LINE_LENGTH, file);
