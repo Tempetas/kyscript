@@ -42,6 +42,10 @@ int *getValue(char *token) {
   }
 }
 
+void concat(char *str1, char *str2) {
+  sprintf(str1, "%s %s", str1, str2);
+}
+
 //Replace "\n" with the newline character
 char *formatStr(char *str) {
   if (str == NULL || str[0] == '\n') { return str; }
@@ -94,15 +98,15 @@ int main(int argc, char** argv) {
             char *str = malloc(LINE_LENGTH);
             memset(str, 0, LINE_LENGTH);
 
-            sprintf(str, "%s %s", formatStr(firstParam + 1), formatStr(secondParam));
+            strcpy(str, formatStr(firstParam + 1));
 
-            do {
-              firstParam = strtok(NULL, " ");
-              sprintf(str, "%s %s", str, formatStr(firstParam));
-            } while (firstParam != NULL);
+            while (secondParam != NULL && secondParam[0] != ';') {
+              concat(str, formatStr(secondParam));
+    	      secondParam = strtok(NULL, " ");
+	    }
 
-            //???
-            str[strlen(str) - 9] = '\0';
+	    //Hack!
+            str[strlen(str) - ((str[strlen(str) - 2] == '"') ? 2 : 1)] = '\0';
 
             printf("%s", str);
 
@@ -110,13 +114,7 @@ int main(int argc, char** argv) {
 
             goto line_done;
           } else {
-            char *format = "%i\n";
-
-            if (!PRINT_NEWLINE) {
-              format = "%i";
-            }
-
-            printf(format, *getValue(firstParam));
+            printf((PRINT_NEWLINE) ? "%i\n" : "%i", *getValue(firstParam));
           }
         break;
         case OPCODE_INPUT:;
