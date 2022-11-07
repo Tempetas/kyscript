@@ -1,12 +1,14 @@
-; Print the fibbonaci sequence
+PRINT "The fibbonaci sequence:\n"
 
 SET X, 0 ; Init the sequence
 SET Y, 1
 SET B, 1
 SET C, 0 ; Counter
 
+PRINT 1 ; First numbers
 PRINT 1
 
+.loop
 SET X, Y ; Store prev val
 SET Y, B ; Set new val
 SET B, 0 ; Add both to form the next value
@@ -17,8 +19,9 @@ ADD C, 1 ; Number counter
 
 PRINT B ; Print the number
 
-IFEQ C, 10 ; How many numbers to print
-JUMP 1000 ; Exit
+IFMR C, 10 ; How many numbers to print
+JUMP exit ; Exit
 
-JUMP 9 ; Repeat the loop
+JUMP loop ; Repeat the loop
 
+.exit

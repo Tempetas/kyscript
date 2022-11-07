@@ -1,16 +1,17 @@
-PARAM PRINT_NEWLINE 0
+PARAM PRINT_NUM_NEWLINE 0
 
 PRINT "---Calculator---\n"
 
-PRINT "Enter the first number:\n> "
+.start
+PRINT "Enter the first number: "
 INPUT A
 
-PRINT "Enter the second number:\n> "
+PRINT "Enter the second number: "
 INPUT B
 
 PRINT "Select whet you want to do:\n"
 PRINT "1) Add\n"
-PRINT "2) Subtract\n> "
+PRINT "2) Subtract\n"
 
 ; Store the choice
 INPUT X
@@ -24,3 +25,14 @@ ADD A, B
 PRINT "Result: "
 PRINT A
 PRINT "\n"
+
+PRINT "Restart?\n"
+PRINT "1) Yes\n"
+PRINT "2) No\n"
+
+INPUT R
+
+PRINT "\n"
+
+IFEQ R, 1
+JUMP start

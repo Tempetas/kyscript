@@ -24,13 +24,16 @@ jobs:
           platform: x64
 
       - name: "Compile for linux"
-        run: gcc main.c -Os -flto -fuse-ld=gold -o kyscript
+        run: gcc interpreter.c preprocessor.c  -Os -flto -fuse-ld=gold -o kyscript
 
       - name: "Remove unnecessary symbols"
         run: strip kyscript -s -R .comment -R .gnu.version --strip-unneeded
 
       - name: "Compile for windows"
-        run: x86_64-w64-mingw32-gcc main.c -Os -flto -s -o kyscript-win
+        run: x86_64-w64-mingw32-gcc interpreter.c preprocessor.c -Os -flto -s -o kyscript-win
+
+      - name: "Prepare examples"
+        run: "zip examples.zip examples/*"
 
       - name: "Upload artifacts"
         uses: actions/upload-artifact@v3
@@ -39,6 +42,7 @@ jobs:
           path:  |
             kyscript
             kyscript-win.exe
+            examples.zip
 
       - name: "Release"
         uses: "marvinpinto/action-automatic-releases@latest"
@@ -50,3 +54,4 @@ jobs:
           files: |
             kyscript
             kyscript-win.exe
+            examples.zip
