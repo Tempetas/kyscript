@@ -16,6 +16,7 @@
 #define OPCODE_INPUT 229624364
 #define OPCODE_PARAM 214257254
 #define OPCODE_MOD 193465272
+#define OPCODE_DIV 193459332
 
 //Same as for opcodes, but for interpreter parameters
 #define PARAM_PRINT_NUM_NEWLINE 3498924034
@@ -178,6 +179,9 @@ int main(const int argc, const char* argv[]) {
 				break;
 			case OPCODE_MUL:
 				*getValue(firstParam) *= *getValue(secondParam);
+				break;
+			case OPCODE_DIV:
+				*getValue(firstParam) /= *getValue(secondParam);
 				break;
 			case OPCODE_JUMP:;
 				//The line we will be jumping to

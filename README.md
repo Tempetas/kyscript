@@ -39,7 +39,9 @@ SET Y, X
 
 `ADD`: same syntaxis as `SET`, add a value to a register
 
-`MUL`: same syntaxis as `ADD`, multiply a value in a register
+`MUL`: same syntaxis as `SET`, multiply a value in a register
+
+`DIV`: same syntaxis as `SET`, divide a value in a register
 
 `MOD`: perform a modulo operation on a register
 ```
