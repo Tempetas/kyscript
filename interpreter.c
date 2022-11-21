@@ -213,7 +213,7 @@ int main(const int argc, const char* argv[]) {
 						break;
 				}
 				break;
-			case OPCODE_MOD:
+			case OPCODE_MOD:;
 				int* first = getValue(firstParam);
 				*first = *first % *getValue(secondParam);
 				break;
