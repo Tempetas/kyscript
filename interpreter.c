@@ -152,7 +152,6 @@ int main(const int argc, const char* argv[]) {
 					if (len < 3) {
 						puts("");
 					} else {
-
 						for (int i = 1; i <= 2; i++) {
 							if (str[len - i] == '"') {
 								str[len - i] = '\0';
@@ -222,8 +221,7 @@ int main(const int argc, const char* argv[]) {
 				}
 				break;
 			case OPCODE_MOD:;
-				int* first = getValue(firstParam);
-				*first = *first % *getValue(secondParam);
+				*getValue(firstParam) %= *getValue(secondParam);
 				break;
 			default:
 				break;
