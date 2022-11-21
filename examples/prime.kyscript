@@ -1,0 +1,44 @@
+PARAM PRINT_NUM_NEWLINE 0 ; Disable newlines after numbers
+
+SET X, 7 ; Start from number 7
+
+PRINT "Calculating primes...\n"
+
+PRINT "1, 3, 5, " ; Print the first few
+
+SET N, 1000 ; How high to count
+
+.main_loop ; Where we count up to N numbers
+SET Y, 1 ; Init Y
+
+SET XH, X ; Half of X
+DIV XH, 2
+
+.inner_loop ; While Y is lower than half of X, check division
+ADD Y, 1
+
+IFMR Y, XH ; Y is above half of X
+JUMP done_testing
+
+SET Z, X
+MOD Z, Y ; Modulo
+
+IFEQ Z, 0 ; Is divisible?
+JUMP done_testing
+
+JUMP inner_loop
+
+.done_testing
+; Number is not a prime
+IFEQ Z, 0
+JUMP increment
+; Number is a prime
+PRINT X
+PRINT ", "
+
+.increment
+ADD X, 1
+IFMR N, X ; Till what number to count
+JUMP main_loop ; Continue the main loop
+
+PRINT "done!\n"
