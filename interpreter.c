@@ -149,11 +149,15 @@ int main(const int argc, const char* argv[]) {
 					//Work around the weirdness of the preprocessor
 					int len = strlen(str);
 
-					if (str[len - 2] == '"') {
-						str[len - 2] = '\0';
+					if (len < 3) {
+						puts("");
 					} else {
-						if (len < 3) {
-							puts("");
+
+						for (int i = 1; i <= 2; i++) {
+							if (str[len - i] == '"') {
+								str[len - i] = '\0';
+								break;
+							}
 						}
 					}
 
