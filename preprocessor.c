@@ -21,7 +21,7 @@ void preprocess(char lines[MAX_LINES][LINE_LENGTH]) {
 	//TODO: rewrite this mess
 	FILE* file = tmpfile();
 
-	int labels[MAX_LABELS] = { 0 };
+	unsigned short labels[MAX_LABELS] = { 0 };
 
 	if (DEBUG) {
 		puts("[Debug] -> Parse file");
@@ -42,7 +42,7 @@ void preprocess(char lines[MAX_LINES][LINE_LENGTH]) {
 				exit(1);
 			}
 
-			labels[hash % MAX_LABELS] = currentLine;
+			labels[hash % MAX_LABELS] = currentLine + 1;
 
 			if (DEBUG) {
 				printf("[Debug] The hash of the label on line %i is %u\n", currentLine, hash);
@@ -78,14 +78,14 @@ void preprocess(char lines[MAX_LINES][LINE_LENGTH]) {
 			const unsigned int hash = strhash(label);
 
 			if (!labels[hash % MAX_LABELS]) {
-				printf("[Error] Unknown label on line %i\n", currentLine);
+				printf("[Error] Jump to unknown label on line %i\n", currentLine);
 				exit(1);
 			}
 
 			//Replace jump labels
 			char numStr[11];
 
-			sprintf(numStr, "JUMP %d\n", labels[hash % MAX_LABELS]);
+			sprintf(numStr, "JUMP %d\n", labels[hash % MAX_LABELS] - 1);
 			strcpy(line, numStr);
 		}
 
