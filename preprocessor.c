@@ -18,9 +18,6 @@ void preprocess(char lines[MAX_LINES][LINE_LENGTH]) {
 		puts("[Debug] <-Preprocessing->");
 	}
 
-	//TODO: rewrite this mess
-	FILE* file = tmpfile();
-
 	unsigned short labels[MAX_LABELS] = { 0 };
 
 	if (DEBUG) {

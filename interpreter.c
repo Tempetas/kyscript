@@ -39,7 +39,7 @@ int linesInFile;
 const unsigned int strhash(const char str[]) {
 	int hash = 5381;
 
-	//Hack! TODO: remove
+	//Hack! TODO: remove the checks for special chars
 	while (*str++ && *str != '\n' && *(str + 1) != ';') {
 		hash = ((hash << 5) + hash) + *str;
 	}
