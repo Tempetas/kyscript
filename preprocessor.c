@@ -80,7 +80,7 @@ void preprocess(char lines[MAX_LINES][LINE_LENGTH]) {
 			}
 
 			//Replace jump labels
-			char numStr[11];
+			char numStr[12];
 
 			sprintf(numStr, "JUMP %d\n", labels[hash % MAX_LABELS] - 1);
 			strcpy(line, numStr);
