@@ -24,7 +24,7 @@ jobs:
           platform: x64
 
       - name: "Compile for linux"
-        run: gcc interpreter.c preprocessor.c  -Os -flto -fuse-ld=gold -o kyscript
+        run: gcc interpreter.c preprocessor.c -Os -flto -fuse-ld=gold -o kyscript
 
       - name: "Remove unnecessary symbols"
         run: strip kyscript -s -R .comment -R .gnu.version --strip-unneeded
