@@ -45,7 +45,21 @@ void preprocess(char lines[MAX_LINES][LINE_LENGTH]) {
 				printf("[Debug] The hash of the label on line %i is %u\n", currentLine, hash);
 			}
 
+			//Make the label line a comment
 			line[0] = ';';
+
+			//TODO: fix this
+			//Replace the potentially missing newline at the end of the line
+			int len = strlen(line);
+
+			if (line[len - 1] != '\n') {
+				line[len - 1] = '\n';
+
+				if (len >= LINE_LENGTH) {
+					printf("[Error] Line %i is to long\n", currentLine + 1);
+					exit(1);
+				}
+			}
 		}
 
 		strcpy(lines[currentLine], line);
