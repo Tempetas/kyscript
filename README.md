@@ -17,6 +17,8 @@ Example:
 PRINT 123 ; This is a comment
 ```
 
+![Screenshot](https://github.com/Tempetas/kyscript/blob/main/screenshot.png?raw=true)
+
 ## Opcodes
 
 `PRINT`: prints the value, supports strings
