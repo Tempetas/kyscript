@@ -76,5 +76,4 @@ PRINT 321 ; And this will
 ```
 PARAM PRINT_NUM_NEWLINE 0 ; Prevents `PRINT` from appending a newline to each integer output
 PARAM DEBUG 1 ; Makes the interpreter print debugging information
-interpreting
 ```
