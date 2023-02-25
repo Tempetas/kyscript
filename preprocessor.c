@@ -26,7 +26,7 @@ void preprocess(char lines[MAX_LINES][LINE_LENGTH]) {
 
 	char line[LINE_LENGTH];
 
-	for (int currentLine = 0; lines[currentLine][0] != EOF; currentLine++) {
+	for (int currentLine = 0; lines[currentLine][0] != '\0'; currentLine++) {
 		strcpy(line, lines[currentLine]);
 
 		if (line[0] == '.') {
@@ -69,7 +69,7 @@ void preprocess(char lines[MAX_LINES][LINE_LENGTH]) {
 		puts("[Debug] -> Replace strings");
 	}
 
-	for (int currentLine = 0; lines[currentLine][0] != EOF; currentLine++) {
+	for (int currentLine = 0; lines[currentLine][0] != '\0'; currentLine++) {
 		strcpy(line, lines[currentLine]);
 
 		if (!strncmp("PRINT \"", line, 7)) {
@@ -106,7 +106,7 @@ void preprocess(char lines[MAX_LINES][LINE_LENGTH]) {
 	if (DEBUG) {
 		puts("[Debug] <-Start source->");
 
-		for (int currentLine = 0; lines[currentLine][0] != EOF; currentLine++) {
+		for (int currentLine = 0; lines[currentLine][0] != '\0'; currentLine++) {
 			printf("%i. %s", currentLine, lines[currentLine]);
 		}
 

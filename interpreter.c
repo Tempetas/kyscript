@@ -60,7 +60,7 @@ int* getValue(const char token[]) {
 
 int main(const int argc, const char* argv[]) {
 	char lines[MAX_LINES][LINE_LENGTH];
-	memset(lines, EOF, sizeof(lines));
+	memset(lines, '\0', sizeof(lines));
 
 	if (argc < 2) {
 		puts("Enter a file to execute");
@@ -109,7 +109,7 @@ int main(const int argc, const char* argv[]) {
 	}
 
 	//Interpret the file
-	for (int currentLine = 0; lines[currentLine][0] != EOF; currentLine++) {
+	for (int currentLine = 0; lines[currentLine][0] != '\0'; currentLine++) {
 	/*if (DEBUG) {
 		printf("[Debug] Line %i\n", currentLine);
 	}*/
