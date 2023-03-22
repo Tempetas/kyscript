@@ -16,13 +16,10 @@ void preprocess(char lines[MAX_LINES][LINE_LENGTH]) {
 
 	if (DEBUG) {
 		puts("[Debug] <-Preprocessing->");
+		puts("[Debug] -> Parse file");
 	}
 
 	unsigned short labels[MAX_LABELS] = { 0 };
-
-	if (DEBUG) {
-		puts("[Debug] -> Parse file");
-	}
 
 	char line[LINE_LENGTH];
 
